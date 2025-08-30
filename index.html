@@ -257,7 +257,7 @@
             border: 2px solid #ccc;
             border-radius: 8px;
             margin: 0 auto 20px;
-            background-image: url('https://i.pinimg.com/736x/f8/19/9e/f8199e7045eec46954401cd3f7ae02b8.jpg');
+            background-image: url('https://i.pinimg.com/736x/9d/7d/4f/9d7d4f850e87d5f253df8eeeb30522b9.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -266,6 +266,7 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
+            color: #333;
         }
 
         .description {
@@ -393,6 +394,114 @@
             font-size: 14px;
             color: #999;
         }
+
+        /* Music Controls - Pixel Theme */
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 2px solid #999;
+            font-family: 'Pixelify Sans', monospace;
+        }
+
+        .music-btn {
+            background: #666;
+            border: 2px solid #999;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+            .music-btn:hover {
+                background: #555;
+                border-color: #777;
+                transform: translateY(-2px);
+            }
+
+            .music-btn.active {
+                background: #1d4ed8;
+                border-color: #2563eb;
+            }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-slider {
+            width: 100px;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            border: 2px solid #999;
+            outline: none;
+        }
+
+            .volume-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 16px;
+                height: 16px;
+                border-radius: 4px;
+                background: #666;
+                border: 2px solid #999;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+                .volume-slider::-webkit-slider-thumb:hover {
+                    background: #555;
+                    transform: scale(1.1);
+                }
+
+            .volume-slider::-moz-range-thumb {
+                width: 16px;
+                height: 16px;
+                border-radius: 4px;
+                background: #666;
+                border: 2px solid #999;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+                .volume-slider::-moz-range-thumb:hover {
+                    background: #555;
+                    transform: scale(1.1);
+                }
+
+        .volume-icon {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .song-info {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #666;
+            min-width: 120px;
+        }
+
+        .now-playing {
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -419,7 +528,7 @@
                 <div class="sidebar">
                     <div class="sidebar-header">
                         <div class="sidebar-title">Navigation</div>
-                        <div class="sidebar-subtitle">Explore my website</div>
+                        <div class="sidebar-subtitle">Explore Unloveable.org</div>
                     </div>
 
                     <div class="nav-section">
@@ -456,8 +565,10 @@
                         <div class="user-header">Who Am i!?</div>
                         <div class="profile-card">
                             <div class="avatar"></div>
-                            <div class="username">Jayden</div>
-                            <div class="description">Video Editor & Minecraft Montage VFX Artist</div>
+                            <div class="username">NSNF / Jayd</div>
+                            <div class="description">--------------------------┋--------------------------</div>
+                            <div class="description">i edit montages sometimes, i love my pretty girl jaida</div>
+                            <div class="description">--------------------------┋--------------------------</div>
                             <div class="status">status: alive! i think</div>
                             <div class="links">
                                 <a target="_blank" href="https://t.me/aimcone" class="link">Telegram</a>
@@ -472,7 +583,7 @@
                         <p>
                             I'm Jayden, an editor with a focus on <b>Minecraft montage VFX</b>.
                             I started editing because I loved turning simple gameplay into
-                            something cinematic and impactful. Over time, I’ve developed a style
+                            something cinematic and impactful. Over time, I've developed a style
                             that mixes fast-paced sync, smooth transitions, and clean effects
                             inspired by professional editing communities.
                         </p>
@@ -483,6 +594,7 @@
                         <h2>Skills</h2>
                         <p>• After Effects, Vegas Pro, Premiere Pro</p>
                         <p>• Thumbnail & graphic design (Photoshop)</p>
+                        <p>• C#,C++,Python,Java</p>
                     </div>
 
                     <div id="contactContent" class="content-area">
@@ -511,7 +623,7 @@
                                 <div class="project-icon">
                                     <i class="fas fa-film"></i>
                                 </div>
-                                <div class="project-title">Video Edits</div>
+                                <div class="project-title">B06/Cs2/Fortnite Cheats</div>
                                 <div class="project-status">In Development</div>
                             </div>
 
@@ -530,9 +642,33 @@
     </div>
 
     <!-- Hidden Music -->
-    <audio id="bgMusic" loop>
-        <source src="music.mp3" type="audio/mpeg">
+    <audio id="bgMusic">
+        <source src="Music.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Music Controls -->
+    <div class="music-controls" id="musicControls" style="display: none;">
+        <button class="music-btn" id="prevBtn" onclick="prevSong()">
+            <i class="fas fa-backward-step"></i>
+        </button>
+        <button class="music-btn" id="playPauseBtn" onclick="toggleMusic()">
+            <i class="fas fa-play"></i>
+        </button>
+        <button class="music-btn" id="nextBtn" onclick="nextSong()">
+            <i class="fas fa-forward-step"></i>
+        </button>
+        <button class="music-btn" id="shuffleBtn" onclick="toggleShuffle()">
+            <i class="fas fa-shuffle"></i>
+        </button>
+        <div class="volume-container">
+            <i class="fas fa-volume-up volume-icon"></i>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
+        </div>
+        <div class="song-info">
+            <div class="now-playing" id="nowPlaying">Music.mp3</div>
+            <div id="songPosition">0:00 / 0:00</div>
+        </div>
+    </div>
 
     <script>
         const verificationMessages = [
@@ -542,10 +678,22 @@
             'finalizing project...'
         ];
 
+        // Music player variables
+        let musicPlaying = false;
+        let currentSongIndex = 0;
+        let isShuffleActive = false;
+        let songHistory = [];
+
+        // Song list - add your music files here
+        const songs = [
+            { title: "Fright Night - Punkinloveee", file: "Music2.mp3" },
+            { title: "that bitch ruined my reputation - imar", file: "Music.mp3" },
+            { title: "im eating a chicken sandwich - empty parking lot", file: "Music3.mp3" }
+        ];
+
         function startVerification() {
-            // Start music when ENTER is clicked
-            const music = document.getElementById('bgMusic');
-            music.play().catch(err => console.log("Autoplay blocked:", err));
+            // Show music controls
+            document.getElementById('musicControls').style.display = 'flex';
 
             const motdScreen = document.getElementById('motdScreen');
             motdScreen.classList.add('fade-out');
@@ -556,22 +704,153 @@
                 verificationScreen.classList.add('active');
 
                 const loadingText = document.getElementById('loadingText');
-                let i = 30;
+                let i = 0;
 
                 function showNextMessage() {
                     if (i < verificationMessages.length) {
                         loadingText.textContent = verificationMessages[i];
                         i++;
-                        setTimeout(showNextMessage, 30);
+                        setTimeout(showNextMessage, 0);
                     } else {
                         setTimeout(() => {
                             verificationScreen.classList.remove('active');
                             document.getElementById('mainInterface').style.display = 'block';
-                        }, 30);
+                            // Auto-play first song when interface loads
+                            loadSong(currentSongIndex);
+                        }, 0);
                     }
                 }
                 setTimeout(showNextMessage, 30);
-            }, 30);
+            }, 0);
+        }
+
+        function loadSong(index) {
+            const music = document.getElementById('bgMusic');
+            music.src = songs[index].file;
+            music.load();
+            music.play().then(() => {
+                musicPlaying = true;
+                updatePlayPauseIcon();
+                document.getElementById('nowPlaying').textContent = songs[index].title;
+                // Add to history if not the same as last song
+                if (songHistory.length === 0 || songHistory[songHistory.length - 1] !== index) {
+                    songHistory.push(index);
+                }
+            }).catch(err => {
+                console.log("Play error:", err);
+            });
+
+            // Update song position display as it plays
+            music.ontimeupdate = function () {
+                updateSongPosition();
+            };
+
+            // When song ends, play next one
+            music.onended = function () {
+                nextSong();
+            };
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+
+            if (musicPlaying) {
+                music.pause();
+            } else {
+                music.play().catch(err => console.log("Play error:", err));
+            }
+
+            musicPlaying = !musicPlaying;
+            updatePlayPauseIcon();
+        }
+
+        function updatePlayPauseIcon() {
+            const btnIcon = document.getElementById('playPauseBtn').querySelector('i');
+            if (musicPlaying) {
+                btnIcon.classList.remove('fa-play');
+                btnIcon.classList.add('fa-pause');
+            } else {
+                btnIcon.classList.remove('fa-pause');
+                btnIcon.classList.add('fa-play');
+            }
+        }
+
+        function changeVolume(volume) {
+            const music = document.getElementById('bgMusic');
+            music.volume = volume;
+
+            // Update volume icon based on volume level
+            const volumeIcon = document.querySelector('.volume-icon');
+            if (volume == 0) {
+                volumeIcon.classList.remove('fa-volume-up', 'fa-volume-down');
+                volumeIcon.classList.add('fa-volume-mute');
+            } else if (volume < 0.5) {
+                volumeIcon.classList.remove('fa-volume-up', 'fa-volume-mute');
+                volumeIcon.classList.add('fa-volume-down');
+            } else {
+                volumeIcon.classList.remove('fa-volume-down', 'fa-volume-mute');
+                volumeIcon.classList.add('fa-volume-up');
+            }
+        }
+
+        function nextSong() {
+            if (isShuffleActive) {
+                // Get a random index that's not the current one
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * songs.length);
+                } while (newIndex === currentSongIndex && songs.length > 1);
+
+                currentSongIndex = newIndex;
+            } else {
+                currentSongIndex = (currentSongIndex + 1) % songs.length;
+            }
+
+            loadSong(currentSongIndex);
+        }
+
+        function prevSong() {
+            // If we're at the beginning of the current song (less than 3 seconds played)
+            // or if there's history to go back to
+            const music = document.getElementById('bgMusic');
+            if (music.currentTime > 3 || songHistory.length < 2) {
+                // Restart current song
+                music.currentTime = 0;
+                if (musicPlaying) {
+                    music.play();
+                }
+            } else {
+                // Go to previous song in history
+                songHistory.pop(); // Remove current song
+                const prevIndex = songHistory.pop(); // Get previous song
+                if (prevIndex !== undefined) {
+                    currentSongIndex = prevIndex;
+                    loadSong(currentSongIndex);
+                }
+            }
+        }
+
+        function toggleShuffle() {
+            isShuffleActive = !isShuffleActive;
+            const shuffleBtn = document.getElementById('shuffleBtn');
+            if (isShuffleActive) {
+                shuffleBtn.classList.add('active');
+            } else {
+                shuffleBtn.classList.remove('active');
+            }
+        }
+
+        function updateSongPosition() {
+            const music = document.getElementById('bgMusic');
+            const currentTime = formatTime(music.currentTime);
+            const duration = formatTime(music.duration || 0);
+            document.getElementById('songPosition').textContent = `${currentTime} / ${duration}`;
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
         function showContent(section) {

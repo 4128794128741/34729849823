@@ -24,6 +24,40 @@
             position: relative;
         }
 
+        /* View Counter Styles */
+        .view-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border: 2px solid #999;
+            font-family: 'Pixelify Sans', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .view-counter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .view-icon {
+            color: #666;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .view-count {
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+
         @keyframes gridMove {
             0% {
                 transform: translate(0, 0);
@@ -332,11 +366,13 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
+            transition: all 0.3s ease;
         }
 
             .back-btn:hover {
                 background: #f0f0f0;
                 border-color: #797979;
+                transform: translateY(-2px);
             }
 
         /* Projects Section Styles */
@@ -375,6 +411,7 @@
             padding: 20px;
             text-align: center;
             border: 1px solid #eee;
+            transition: all 0.3s ease;
         }
 
         .project-icon {
@@ -393,6 +430,113 @@
         .project-status {
             font-size: 14px;
             color: #999;
+        }
+
+        /* Comments Section Styles */
+        .comments-content {
+            display: none;
+            width: 100%;
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+            .comments-content.active {
+                display: block;
+            }
+
+        .comment-form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #666;
+            color: white;
+            border: 2px solid #999;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+            .submit-btn:hover {
+                background: #555;
+                border-color: #777;
+            }
+
+        .comments-list {
+            margin-top: 30px;
+        }
+
+        .comment {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .comment-date {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .comment-text {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin: 30px 0;
         }
 
         /* Music Controls - Pixel Theme */
@@ -505,6 +649,12 @@
     </style>
 </head>
 <body>
+    <!-- View Counter -->
+    <div class="view-counter" id="viewCounter">
+        <i class="fas fa-eye view-icon"></i>
+        <span class="view-count" id="viewCount">0</span>
+    </div>
+
     <div class="container">
         <!-- MOTD Screen -->
         <div class="motd-screen" id="motdScreen">
@@ -544,6 +694,9 @@
                         </div>
                         <div class="nav-item" onclick="showContent('projects')">
                             <i class="fas fa-project-diagram"></i>Projects
+                        </div>
+                        <div class="nav-item" onclick="showContent('comments')">
+                            <i class="fas fa-comments"></i>Comments
                         </div>
                     </div>
 
@@ -636,6 +789,28 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="commentsContent" class="comments-content">
+                        <button class="back-btn" onclick="goBack()">← Back</button>
+                        <h2>Comments</h2>
+                        <p>Leave a comment below!</p>
+                        
+                        <div class="comment-form">
+                            <div class="form-group">
+                                <label for="commentName">Name:</label>
+                                <input type="text" id="commentName" placeholder="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="commentText">Comment:</label>
+                                <textarea id="commentText" placeholder="Your comment"></textarea>
+                            </div>
+                            <button class="submit-btn" onclick="addComment()">Submit Comment</button>
+                        </div>
+                        
+                        <div class="comments-list" id="commentsList">
+                            <!-- Comments will be loaded here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -671,6 +846,19 @@
     </div>
 
     <script>
+        // View counter functionality
+        let viewCount = localStorage.getItem('viewCount') || 0;
+        
+        // Increment view count if this is a new session
+        if (!sessionStorage.getItem('hasVisited')) {
+            viewCount++;
+            localStorage.setItem('viewCount', viewCount);
+            sessionStorage.setItem('hasVisited', 'true');
+        }
+        
+        // Update the view counter display
+        document.getElementById('viewCount').textContent = viewCount;
+
         const verificationMessages = [
             'syncing clips...',
             'adding effects...',
@@ -690,6 +878,61 @@
             { title: "that bitch ruined my reputation - imar", file: "Music.mp3" },
             { title: "im eating a chicken sandwich - empty parking lot", file: "Music3.mp3" }
         ];
+
+        // Comments functionality
+        function loadComments() {
+            const commentsList = document.getElementById('commentsList');
+            const comments = JSON.parse(localStorage.getItem('websiteComments')) || [];
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="no-comments">No comments yet. Be the first to leave one!</div>';
+                return;
+            }
+            
+            commentsList.innerHTML = '';
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                commentElement.innerHTML = `
+                    <div class="comment-header">
+                        <span class="comment-author">${comment.name}</span>
+                        <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
+                    </div>
+                    <div class="comment-text">${comment.text}</div>
+                `;
+                commentsList.appendChild(commentElement);
+            });
+        }
+        
+        function addComment() {
+            const nameInput = document.getElementById('commentName');
+            const textInput = document.getElementById('commentText');
+            
+            const name = nameInput.value.trim();
+            const text = textInput.value.trim();
+            
+            if (!name || !text) {
+                alert('Please fill in both name and comment fields.');
+                return;
+            }
+            
+            const comments = JSON.parse(localStorage.getItem('websiteComments')) || [];
+            const newComment = {
+                name: name,
+                text: text,
+                date: new Date().toISOString()
+            };
+            
+            comments.unshift(newComment); // Add to beginning of array (newest first)
+            localStorage.setItem('websiteComments', JSON.stringify(comments));
+            
+            // Clear inputs
+            nameInput.value = '';
+            textInput.value = '';
+            
+            // Reload comments
+            loadComments();
+        }
 
         function startVerification() {
             // Show music controls
@@ -857,18 +1100,21 @@
             document.getElementById('profileView').style.display = 'none';
             document.querySelectorAll('.content-area').forEach(a => a.classList.remove('active'));
             document.querySelectorAll('.projects-content').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.comments-content').forEach(a => a.classList.remove('active'));
+            
+            if (section === 'comments') {
+                loadComments(); // Load comments when the comments section is opened
+            }
+            
             document.getElementById(section + 'Content').classList.add('active');
         }
 
         function goBack() {
             document.querySelectorAll('.content-area').forEach(a => a.classList.remove('active'));
             document.querySelectorAll('.projects-content').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.comments-content').forEach(a => a.classList.remove('active'));
             document.getElementById('profileView').style.display = 'block';
         }
     </script>
 </body>
-
 </html>
-
-
-
